@@ -24,9 +24,13 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"idcloudhost_vm":          resourceVirtualMachine(),
-			"idcloudhost_vm_disks":    resourceDisk(),
-			"idcloudhost_floating_ip": resourceFloatingIP(),
+			"idcloudhost_vm":            resourceVirtualMachine(),
+			"idcloudhost_vm_disks":      resourceDisk(),
+			"idcloudhost_floating_ip":   resourceFloatingIP(),
+			"idcloudhost_network":       resourceNetwork(),
+			"idcloudhost_firewall":      resourceFirewall(),
+			"idcloudhost_loadbalancer":  resourceLoadBalancer(),
+			"idcloudhost_objectstorage": resourceObjectStorage(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"idcloudhost_vms": dataSourceVirtualMachine(),
