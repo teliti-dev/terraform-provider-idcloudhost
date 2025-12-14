@@ -1,0 +1,210 @@
+name: Manual Integration Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource:
+        description: 'Resource to test (network, firewall, loadbalancer, objectstorage, or all)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - network
+          - firewall
+          - loadbalancer
+          - objectstorage
+
+jobs:
+  build:
+    name: Build Provider
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build provider
+        run: go build -o terraform-provider-idcloudhost
+
+      - name: Upload provider binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-provider-idcloudhost
+          path: terraform-provider-idcloudhost
+          retention-days: 1
+
+  test-network:
+    name: Test Network Resource
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.resource == 'network' || github.event.inputs.resource == 'all' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.6.0'
+
+      - name: Download provider binary
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-provider-idcloudhost
+
+      - name: Make provider executable
+        run: chmod +x terraform-provider-idcloudhost
+
+      - name: Test Network Resource
+        working-directory: examples/network
+        env:
+          IDCLOUDHOST_AUTH_TOKEN: ${{ secrets.IDCLOUDHOST_AUTH_TOKEN }}
+        run: |
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
+          terraform show
+          terraform destroy -auto-approve
+
+  test-firewall:
+    name: Test Firewall Resource
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.resource == 'firewall' || github.event.inputs.resource == 'all' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.6.0'
+
+      - name: Download provider binary
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-provider-idcloudhost
+
+      - name: Make provider executable
+        run: chmod +x terraform-provider-idcloudhost
+
+      - name: Test Firewall Resource
+        working-directory: examples/firewall
+        env:
+          IDCLOUDHOST_AUTH_TOKEN: ${{ secrets.IDCLOUDHOST_AUTH_TOKEN }}
+        run: |
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
+          terraform show
+          terraform destroy -auto-approve
+
+  test-loadbalancer:
+    name: Test LoadBalancer Resource
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.resource == 'loadbalancer' || github.event.inputs.resource == 'all' }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.6.0'
+
+      - name: Download provider binary
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-provider-idcloudhost
+
+      - name: Make provider executable
+        run: chmod +x terraform-provider-idcloudhost
+
+      - name: Test LoadBalancer Resource
+        working-directory: examples/loadbalancer
+        env:
+          IDCLOUDHOST_AUTH_TOKEN: ${{ secrets.IDCLOUDHOST_AUTH_TOKEN }}
+        run: |
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
+          terraform show
+          terraform destroy -auto-approve
+
+  test-objectstorage:
+    name: Test ObjectStorage Resource
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.resource == 'objectstorage' || github.event.inputs.resource == 'all' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.6.0'
+
+      - name: Download provider binary
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-provider-idcloudhost
+
+      - name: Make provider executable
+        run: chmod +x terraform-provider-idcloudhost
+
+      - name: Update bucket names with timestamp
+        working-directory: examples/objectstorage
+        run: |
+          TIMESTAMP=$(date +%s)
+          sed -i "s/my-app-data-bucket/my-app-data-bucket-${TIMESTAMP}/g" main.tf
+          sed -i "s/my-backup-bucket/my-backup-bucket-${TIMESTAMP}/g" main.tf
+          sed -i "s/my-static-assets/my-static-assets-${TIMESTAMP}/g" main.tf
+
+      - name: Test ObjectStorage Resource
+        working-directory: examples/objectstorage
+        env:
+          IDCLOUDHOST_AUTH_TOKEN: ${{ secrets.IDCLOUDHOST_AUTH_TOKEN }}
+        run: |
+          terraform init
+          terraform plan
+          terraform apply -auto-approve
+          terraform show
+          terraform destroy -auto-approve
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [test-network, test-firewall, test-loadbalancer, test-objectstorage]
+    if: always()
+    steps:
+      - name: Check test results
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Resource | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Network | ${{ needs.test-network.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Firewall | ${{ needs.test-firewall.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| LoadBalancer | ${{ needs.test-loadbalancer.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ObjectStorage | ${{ needs.test-objectstorage.result }} |" >> $GITHUB_STEP_SUMMARY
