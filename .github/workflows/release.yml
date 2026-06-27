@@ -12,7 +12,12 @@
 name: release
 on:
   release:
-    types: [published]
+    types: [published, created, released]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag version to release (e.g. v0.2.0)"
+        required: true
 permissions:
   contents: write
 jobs:
@@ -41,5 +46,5 @@ jobs:
           args: release --clean
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
-          # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_CURRENT_TAG: ${{ github.event.inputs.tag || github.event.release.tag_name }}
