@@ -209,6 +209,14 @@ func resourceVirtualMachine() *schema.Resource {
 					return
 				},
 			},
+			"designated_pool_uuid": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"network_uuid": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -218,21 +226,23 @@ func resourceVirtualMachineCreate(ctx context.Context, d *schema.ResourceData, m
 	var diags diag.Diagnostics
 
 	newVM := &idcloudhostVM.NewVM{
-		Backup:          d.Get("backup").(bool),
-		BillingAccount:  d.Get("billing_account_id").(int), //should be automatically assigned to "default" billing account if not specified
-		Description:     d.Get("description").(string),
-		Disks:           d.Get("disks").(int),
-		Name:            d.Get("name").(string),
-		OSName:          d.Get("os_name").(string),
-		OSVersion:       d.Get("os_version").(string),
-		InitialPassword: d.Get("initial_password").(string),
-		PublicKey:       d.Get("public_key").(string),
-		SourceReplica:   d.Get("source_replica").(string),
-		SourceUUID:      d.Get("source_uuid").(string),
-		Username:        d.Get("username").(string),
-		VCPU:            d.Get("vcpu").(int),
-		Memory:          d.Get("memory").(int),
-		ReservePublicIP: false,
+		Backup:             d.Get("backup").(bool),
+		BillingAccount:     d.Get("billing_account_id").(int),
+		Description:        d.Get("description").(string),
+		Disks:              d.Get("disks").(int),
+		Name:               d.Get("name").(string),
+		OSName:             d.Get("os_name").(string),
+		OSVersion:          d.Get("os_version").(string),
+		InitialPassword:    d.Get("initial_password").(string),
+		PublicKey:          d.Get("public_key").(string),
+		SourceReplica:      d.Get("source_replica").(string),
+		SourceUUID:         d.Get("source_uuid").(string),
+		Username:           d.Get("username").(string),
+		VCPU:               d.Get("vcpu").(int),
+		Memory:             d.Get("memory").(int),
+		ReservePublicIP:    false,
+		DesignatedPoolUUID: d.Get("designated_pool_uuid").(string),
+		NetworkUUID:        d.Get("network_uuid").(string),
 	}
 
 	vmApi := c.VM

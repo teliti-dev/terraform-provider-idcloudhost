@@ -130,8 +130,8 @@ github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.2/go.mod h1:R6va5+xMeoiuVRoj+gSkQ7d3FALtqAAGI1FQKckRals=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
-github.com/teliti-dev/tf-idcloudhost-client v1.2.0 h1:lAJCC7/lC9nzF2mMv4B/PTWUQA6KS1VS50w3qEIaviE=
-github.com/teliti-dev/tf-idcloudhost-client v1.2.0/go.mod h1:5Fd29XxHx14mIE713IhAlbA92rUragUCURDpwpvx470=
+github.com/teliti-dev/tf-idcloudhost-client v1.3.0 h1:7H7zI6gRs9J18qJ6c4O5Zm6LIzh+yn+0Y+69kM7MuEU=
+github.com/teliti-dev/tf-idcloudhost-client v1.3.0/go.mod h1:5Fd29XxHx14mIE713IhAlbA92rUragUCURDpwpvx470=
 github.com/vmihailenco/msgpack v3.3.3+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
 github.com/vmihailenco/msgpack v4.0.4+incompatible h1:dSLoQfGFAo3F6OoNhwUmLwVgaUXK79GlxNBwueZn0xI=
 github.com/vmihailenco/msgpack v4.0.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
