@@ -1,6 +1,6 @@
 TEST?=$$(go list ./... | grep -v 'vendor')
 HOSTNAME=github.com
-NAMESPACE=bapung
+NAMESPACE=teliti-dev
 NAME=idcloudhost
 BINARY=terraform-provider-${NAME}
 VERSION=0.2
