@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	idcloudhostAPI "github.com/bapung/idcloudhost-go-client-library/idcloudhost/api"
+	idcloudhostAPI "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )

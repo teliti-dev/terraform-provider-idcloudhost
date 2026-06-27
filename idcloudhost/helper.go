@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strconv"
 
-	idcloudhostVM "github.com/bapung/idcloudhost-go-client-library/idcloudhost/vm"
-	idcloudhostDisk "github.com/bapung/idcloudhost-go-client-library/idcloudhost/disk"
-	idcloudhostFloatingIP "github.com/bapung/idcloudhost-go-client-library/idcloudhost/floatingip"
+	idcloudhostVM "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/vm"
+	idcloudhostDisk "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/disk"
+	idcloudhostFloatingIP "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/floatingip"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 

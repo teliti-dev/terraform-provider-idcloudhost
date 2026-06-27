@@ -1,10 +1,10 @@
-module github.com/bapung/terraform-provider-idcloudhost
+module github.com/teliti-dev/tf-idcloudhost
 
 go 1.19
 
 require (
-	github.com/bapung/idcloudhost-go-client-library v1.1.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.0
+	github.com/teliti-dev/tf-idcloudhost-client v1.2.0
 )
 
 require (

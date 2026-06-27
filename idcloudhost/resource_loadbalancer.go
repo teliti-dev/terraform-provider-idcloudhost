@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	idcloudhostAPI "github.com/bapung/idcloudhost-go-client-library/idcloudhost/api"
-	idcloudhostLoadBalancer "github.com/bapung/idcloudhost-go-client-library/idcloudhost/loadbalancer"
+	idcloudhostAPI "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/api"
+	idcloudhostLoadBalancer "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/loadbalancer"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )

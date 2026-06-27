@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	idcloudhostAPI "github.com/bapung/idcloudhost-go-client-library/idcloudhost/api"
-	idcloudhostObjectStorage "github.com/bapung/idcloudhost-go-client-library/idcloudhost/objectstorage"
+	idcloudhostAPI "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/api"
+	idcloudhostObjectStorage "github.com/teliti-dev/tf-idcloudhost-client/idcloudhost/objectstorage"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
