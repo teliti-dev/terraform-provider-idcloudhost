@@ -85,11 +85,13 @@ func resourceVirtualMachine() *schema.Resource {
 			},
 			"os_name": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
+				Default:  "",
 			},
 			"os_version": {
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
+				Default:  "",
 			},
 			"initial_password": {
 				Type:      schema.TypeString,

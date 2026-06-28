@@ -12,6 +12,8 @@ Creates and manages a Virtual Machine on IDCloudHost.
 
 ## Example Usage
 
+### OS (Linux Distribution)
+
 ```hcl
 resource "idcloudhost_network" "main" {
   name = "my-network"
@@ -30,11 +32,38 @@ resource "idcloudhost_vm" "example" {
   billing_account_id = var.billing_account_id
   backup             = false
 
-  # Optional: select a server class (leave empty to use region default)
   designated_pool_uuid = "00000000-0000-0000-0000-000022006840"
+  network_uuid         = idcloudhost_network.main.uuid
+}
+```
 
-  # Optional: attach to a private network on creation
-  network_uuid = idcloudhost_network.main.uuid
+### App Catalog (Pre-installed Application)
+
+```hcl
+resource "idcloudhost_vm" "wordpress" {
+  name               = "my-wordpress"
+  os_name            = "wordpress"
+  os_version         = "6.2"
+  vcpu               = 2
+  memory             = 2048
+  disks              = 20
+  username           = "ubuntu"
+  initial_password   = var.vm_password
+  billing_account_id = var.billing_account_id
+}
+```
+
+### Empty Disk (No OS)
+
+```hcl
+resource "idcloudhost_vm" "blank" {
+  name               = "my-blank-vm"
+  vcpu               = 2
+  memory             = 2048
+  disks              = 20
+  username           = "admin"
+  initial_password   = var.vm_password
+  billing_account_id = var.billing_account_id
 }
 ```
 
@@ -61,8 +90,6 @@ All pools support: vCPU 2–32, RAM 2048–65536 MB, Disk 20–1000 GB.
 - `initial_password` (String, Sensitive) — Initial VM password. Must be at least 8 characters and contain uppercase letters, numbers, and symbols.
 - `memory` (Number) — RAM in MB. Minimum: `2048`, Maximum: `65536`.
 - `name` (String) — VM name.
-- `os_name` (String) — Operating system name. Example: `ubuntu`.
-- `os_version` (String) — Operating system version. Example: `20.04`, `22.04`.
 - `username` (String) — Login username for the VM.
 - `vcpu` (Number) — Number of vCPUs. Minimum: `2`, Maximum: `32`.
 
@@ -72,6 +99,8 @@ All pools support: vCPU 2–32, RAM 2048–65536 MB, Disk 20–1000 GB.
 - `description` (String) — VM description.
 - `designated_pool_uuid` (String) — Server class (pool) UUID. Leave empty to use the region default. See the [Server Classes](#server-classes-designated_pool_uuid) table above.
 - `network_uuid` (String) — UUID of the private network to attach the VM to on creation.
+- `os_name` (String) — OS or App Catalog name. Examples: `ubuntu`, `debian`, `centos`, `wordpress`, `lamp`. Leave empty for an empty disk.
+- `os_version` (String) — OS or App Catalog version. Examples: `22.04`, `11`, `6.2`. Leave empty for an empty disk.
 - `public_key` (String) — SSH public key injected into the VM via cloud-init.
 - `source_replica` (String) — Replica name to clone from a backup.
 - `source_uuid` (String) — UUID of the source VM to clone.
