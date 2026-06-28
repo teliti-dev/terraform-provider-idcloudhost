@@ -1,14 +1,22 @@
 ---
 page_title: "idcloudhost Provider"
 description: |-
-  Terraform provider untuk IDCloudHost Cloud VPS. Supports VM, network, floating IP, firewall, load balancer, dan object storage.
+  Use the IDCloudHost provider to manage cloud infrastructure resources including virtual machines, private networks, floating IPs, firewalls, load balancers, and object storage.
 ---
 
-# idcloudhost Provider
+# IDCloudHost Provider
 
-Provider untuk mengelola resources di [IDCloudHost](https://idcloudhost.com).
+The IDCloudHost provider is used to manage resources in [IDCloudHost](https://idcloudhost.com) Cloud VPS.
 
-## Konfigurasi
+## Authentication
+
+The provider requires an API token. Set it via environment variable (recommended):
+
+```bash
+export IDCLOUDHOST_AUTH_TOKEN="your-api-token"
+```
+
+## Example Usage
 
 ```hcl
 terraform {
@@ -21,8 +29,8 @@ terraform {
 }
 
 provider "idcloudhost" {
-  auth_token = var.auth_token  # atau via env: IDCLOUDHOST_AUTH_TOKEN
-  region     = "jkt01"         # jkt01 | jkt03 | sgp01
+  # auth_token is read from IDCLOUDHOST_AUTH_TOKEN env var
+  region = "jkt01"
 }
 ```
 
@@ -30,5 +38,5 @@ provider "idcloudhost" {
 
 ### Optional
 
-- `auth_token` (String, Sensitive) — API token IDCloudHost. Bisa juga via env `IDCLOUDHOST_AUTH_TOKEN`.
-- `region` (String) — Region IDCloudHost. Default: `jkt01`. Pilihan: `jkt01`, `jkt03`, `sgp01`.
+- `auth_token` (String, Sensitive) — IDCloudHost API token. Can also be set via the `IDCLOUDHOST_AUTH_TOKEN` environment variable.
+- `region` (String) — IDCloudHost region. Defaults to `jkt01`. Valid values: `jkt01`, `jkt03`, `sgp01`.

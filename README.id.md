@@ -4,23 +4,23 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/teliti-dev/terraform-provider-idcloudhost)](go.mod)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Terraform provider for [IDCloudHost](https://idcloudhost.com) Cloud VPS. Manage virtual machines, private networks, floating IPs, firewalls, load balancers, and object storage through Terraform.
+Terraform provider untuk [IDCloudHost](https://idcloudhost.com) Cloud VPS. Kelola virtual machine, private network, floating IP, firewall, load balancer, dan object storage melalui Terraform.
 
-Forked from [bapung/terraform-provider-idcloudhost](https://github.com/bapung/terraform-provider-idcloudhost) and maintained by [teliti-dev](https://github.com/teliti-dev).
+Diturunkan dari [bapung/terraform-provider-idcloudhost](https://github.com/bapung/terraform-provider-idcloudhost) dan dikelola oleh [teliti-dev](https://github.com/teliti-dev).
 
 ---
 
-## Requirements
+## Persyaratan
 
 - [Terraform](https://developer.hashicorp.com/terraform/downloads) >= 1.0
-- [Go](https://golang.org/doc/install) >= 1.21 (only for local development)
-- An [IDCloudHost](https://idcloudhost.com) account with an API token
+- [Go](https://golang.org/doc/install) >= 1.21 (hanya untuk development lokal)
+- Akun [IDCloudHost](https://idcloudhost.com) dengan API token
 
 ---
 
-## Installation
+## Instalasi
 
-Add the provider to your Terraform configuration:
+Tambahkan provider ke konfigurasi Terraform:
 
 ```hcl
 terraform {
@@ -33,7 +33,7 @@ terraform {
 }
 ```
 
-Then run:
+Kemudian jalankan:
 
 ```bash
 terraform init
@@ -41,28 +41,28 @@ terraform init
 
 ---
 
-## Authentication
+## Autentikasi
 
-Set your API token via environment variable (recommended):
+Set API token melalui environment variable (direkomendasikan):
 
 ```bash
-export IDCLOUDHOST_AUTH_TOKEN="your-api-token"
+export IDCLOUDHOST_AUTH_TOKEN="api-token-anda"
 ```
 
-Or pass it directly in the provider block (not recommended for production):
+Atau langsung di blok provider (tidak direkomendasikan untuk production):
 
 ```hcl
 provider "idcloudhost" {
-  auth_token = "your-api-token"
+  auth_token = "api-token-anda"
   region     = "jkt01"
 }
 ```
 
 ---
 
-## Regions
+## Region
 
-| Region | Location    |
+| Region | Lokasi      |
 |--------|-------------|
 | `jkt01` | Jakarta 1  |
 | `jkt03` | Jakarta 3  |
@@ -70,25 +70,25 @@ provider "idcloudhost" {
 
 ---
 
-## Server Classes
+## Server Class
 
-Use the `designated_pool_uuid` field on `idcloudhost_vm` to select a server class. Leave it empty to use the region default.
+Gunakan field `designated_pool_uuid` pada `idcloudhost_vm` untuk memilih server class. Kosongkan untuk menggunakan DEFAULT region.
 
-| Region | Pool           | Description       | UUID                                   |
+| Region | Pool           | Keterangan        | UUID                                   |
 |--------|----------------|-------------------|----------------------------------------|
 | `jkt01` | Basic         | Standard          | `00000000-0000-0000-0000-000022006840` |
-| `jkt01` | Intel eXtreme | 5x Faster         | `9b6bf39f-6559-4e06-be68-6252e980468d` |
-| `jkt01` | **AMD eXtreme** | 6x Faster — **DEFAULT** | `6d4026f6-1a7b-4f32-966b-2e739d4533b1` |
+| `jkt01` | Intel eXtreme | 5x Lebih Cepat    | `9b6bf39f-6559-4e06-be68-6252e980468d` |
+| `jkt01` | **AMD eXtreme** | 6x Lebih Cepat — **DEFAULT** | `6d4026f6-1a7b-4f32-966b-2e739d4533b1` |
 | `jkt03` | **Basic**     | Standard — **DEFAULT** | `1bcdc355-83b9-41db-83f4-7162b19a2990` |
-| `sgp01` | **Intel Pro** | 3x Faster — **DEFAULT** | `e2ab9e01-43ef-4a20-93e2-30a40d7545fb` |
+| `sgp01` | **Intel Pro** | 3x Lebih Cepat — **DEFAULT** | `e2ab9e01-43ef-4a20-93e2-30a40d7545fb` |
 
-All pools support: vCPU 2–32, RAM 2048–65536 MB, Disk 20–1000 GB.
+Semua pool mendukung: vCPU 2–32, RAM 2048–65536 MB, Disk 20–1000 GB.
 
 ---
 
-## Example Usage
+## Contoh Penggunaan
 
-### VM with Private Network and Floating IP
+### VM dengan Private Network dan Floating IP
 
 ```hcl
 terraform {
@@ -121,10 +121,10 @@ resource "idcloudhost_vm" "web" {
   billing_account_id = var.billing_account_id
   backup             = false
 
-  # Optional: select server class (leave empty for region default)
+  # Opsional: pilih server class (kosongkan untuk DEFAULT region)
   designated_pool_uuid = "00000000-0000-0000-0000-000022006840"
 
-  # Optional: attach to private network on creation
+  # Opsional: attach ke private network saat VM dibuat
   network_uuid = idcloudhost_network.main.uuid
 }
 
@@ -137,13 +137,13 @@ output "public_ip"  { value = idcloudhost_floating_ip.web.address }
 output "private_ip" { value = idcloudhost_vm.web.private_ipv4 }
 ```
 
-> **Note:** Floating IPs must be manually assigned to a VM via the IDCloudHost dashboard after `terraform apply`. The provider reserves the IP but does not auto-assign it.
+> **Catatan:** Floating IP harus di-assign ke VM secara manual melalui dashboard IDCloudHost setelah `terraform apply`. Provider hanya mereservasi IP, tidak melakukan auto-assign.
 
 ---
 
 ## Resources
 
-| Resource | Description |
+| Resource | Keterangan |
 |---|---|
 | [`idcloudhost_vm`](docs/resources/vm.md) | Virtual machine |
 | [`idcloudhost_network`](docs/resources/network.md) | Private network |
@@ -151,39 +151,39 @@ output "private_ip" { value = idcloudhost_vm.web.private_ipv4 }
 | [`idcloudhost_firewall`](docs/resources/firewall.md) | Firewall rules |
 | [`idcloudhost_loadbalancer`](docs/resources/loadbalancer.md) | Load balancer |
 | [`idcloudhost_objectstorage`](docs/resources/objectstorage.md) | Object storage bucket |
-| [`idcloudhost_vm_disks`](docs/resources/vm_disks.md) | Additional disk for VM |
+| [`idcloudhost_vm_disks`](docs/resources/vm_disks.md) | Disk tambahan untuk VM |
 
 ## Data Sources
 
-| Data Source | Description |
+| Data Source | Keterangan |
 |---|---|
-| [`idcloudhost_vms`](docs/data-sources/vms.md) | List all VMs in the account |
+| [`idcloudhost_vms`](docs/data-sources/vms.md) | List semua VM di akun |
 
 ---
 
-## Local Development
+## Development Lokal
 
 ```bash
 git clone git@github.com:teliti-dev/terraform-provider-idcloudhost.git
 cd terraform-provider-idcloudhost
 
-# Build and install locally
+# Build dan install lokal
 make install
 
-# Run tests
+# Jalankan tests
 make test
 ```
 
-The `make install` command builds the binary and copies it to `~/.terraform.d/plugins/` so you can use it with a local Terraform configuration.
+Perintah `make install` mem-build binary dan menyalinnya ke `~/.terraform.d/plugins/` agar bisa digunakan dengan konfigurasi Terraform lokal.
 
 ---
 
-## Contributing
+## Kontribusi
 
-Pull requests are welcome. For major changes, please open an issue first.
+Pull request diterima. Untuk perubahan besar, buka issue terlebih dahulu.
 
 ---
 
-## License
+## Lisensi
 
 [MIT](LICENSE)
